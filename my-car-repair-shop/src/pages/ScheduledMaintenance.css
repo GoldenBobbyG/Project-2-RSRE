@@ -1,0 +1,176 @@
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  padding: 24px;
+  background-color: #f5f8fa;
+}
+
+.main-content h1 {
+  color: #2a7;
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.main-content p {
+  color: #667785;
+  margin-bottom: 24px;
+  font-size: 16px;
+}
+
+.service-orders-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+  margin-top: 20px;
+}
+
+.order-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.order-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.vehicle-header {
+  background: linear-gradient(to right, #2a7, #1a9988);
+  color: white;
+  padding: 16px;
+  font-weight: 600;
+  font-size: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.vehicle-model {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.order-content {
+  padding: 16px;
+}
+
+.vehicle-info {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 12px;
+}
+
+.customer-info {
+  color: #444;
+  font-weight: 500;
+}
+
+.vehicle-year {
+  color: #667785;
+  font-weight: 500;
+}
+
+.requested-services {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.service-item {
+  padding: 12px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.service-item:last-child {
+  border-bottom: none;
+}
+
+.service-name {
+  color: #333;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.service-details {
+  color: #667785;
+  font-size: 14px;
+}
+
+.request-date {
+  margin-top: 8px;
+  font-size: 13px;
+  color: #94a3b8;
+  text-align: right;
+}
+
+.order-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #eee;
+}
+
+.action-button {
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.assign-button {
+  background-color: #2a7;
+  color: white;
+}
+
+.assign-button:hover {
+  background-color: #1a9988;
+}
+
+.details-button {
+  background-color: #f1f5f9;
+  color: #475569;
+}
+
+.details-button:hover {
+  background-color: #e2e8f0;
+}
+
+.order-priority {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  margin-top: 8px;
+}
+
+.priority-standard {
+  background-color: #e6f2ff;
+  color: #0070e0;
+}
+
+.priority-urgent {
+  background-color: #fff1f1;
+  color: #e11d48;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .service-orders-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,83 @@
+.app-container {
+    display: flex;
+  }
+  
+  .main-content {
+    flex: 1;
+    padding: 20px;
+    background-color: #fffbe6;
+  }
+  
+  .main-content h1 {
+    color: #a72;
+  }
+
+
+.status-section {
+  margin-bottom: 12px;
+}
+
+.order-status {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.in-progress {
+  background-color: #fff3e0;
+  color: #ef6c00;
+}
+
+.completed {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.progress-bar {
+  height: 8px;
+  background-color: #eee;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: #2a7;
+  transition: width 0.3s ease;
+}
+
+.technician-bill {
+  display: flex;
+  justify-content: space-between;
+  margin: 12px 0;
+  padding: 12px 0;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+}
+
+.label {
+  display: block;
+  color: #667785;
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+
+.timing-info {
+  display: flex;
+  justify-content: space-between;
+  margin: 12px 0;
+  color: #667785;
+  font-size: 14px;
+}
+
+.invoice-button {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.invoice-button:hover {
+  background-color: #45a049;
+}
