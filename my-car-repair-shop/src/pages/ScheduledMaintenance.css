@@ -35,6 +35,7 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   overflow: hidden;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
 }
 
 .order-card:hover {
@@ -51,11 +52,57 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
 }
 
 .vehicle-model {
   font-size: 14px;
   opacity: 0.9;
+  margin-right: 24px; /* Makes room for the cancel button */
+}
+
+.cancel-button {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.cancel-button:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.cancel-icon {
+  font-size: 20px;
+  line-height: 1;
+  color: white;
+}
+
+.cancel-tooltip {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  top: -30px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s, visibility 0.2s;
+  white-space: nowrap;
+}
+
+.cancel-button:hover .cancel-tooltip {
+  opacity: 1;
+  visibility: visible;
 }
 
 .order-content {
@@ -111,6 +158,21 @@
   font-size: 13px;
   color: #94a3b8;
   text-align: right;
+}
+
+.estimated-cost {
+  margin-top: 16px;
+  padding: 12px 0;
+  border-top: 1px solid #eee;
+  font-weight: 500;
+  color: #334155;
+  display: flex;
+  justify-content: space-between;
+}
+
+.estimated-cost span {
+  color: #2a7;
+  font-weight: 600;
 }
 
 .order-actions {

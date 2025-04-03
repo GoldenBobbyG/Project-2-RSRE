@@ -87,10 +87,6 @@ const CurrentMaintenance: React.FC = () => {
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
-  const getStatusClass = (status: string) => {
-    return status.toLowerCase().replace(' ', '-');
-  };
-
   return (
     <div className="app-container">
       <Sidebar />
@@ -102,8 +98,9 @@ const CurrentMaintenance: React.FC = () => {
           {currentOrders.map(order => (
             <div key={order.id} className="order-card">
               <div className="vehicle-header">
-                <div>{order.make}</div>
+                <div className="make">{order.make}</div>
                 <div className="vehicle-model">{order.model}</div>
+                <div className="cancel-button" title="Cancel Order">×</div>
               </div>
               
               <div className="order-content">
@@ -112,18 +109,6 @@ const CurrentMaintenance: React.FC = () => {
                   <div className="vehicle-year">{order.year}</div>
                 </div>
                 
-                <div className="status-section">
-                  <span className={`order-status ${getStatusClass(order.status)}`}>
-                    {order.status}
-                  </span>
-                  <div className="progress-bar">
-                    <div 
-                      className="progress-fill" 
-                      style={{ width: `${order.progress}%` }}
-                    ></div>
-                  </div>
-                </div>
-
                 <div className="technician-bill">
                   <div className="technician-info">
                     <span className="label">Technician:</span>
@@ -158,8 +143,8 @@ const CurrentMaintenance: React.FC = () => {
                 </ul>
                 
                 <div className="order-actions">
-                  <button className="action-button details-button">Update Progress</button>
-                  <button className="action-button invoice-button">Generate Invoice</button>
+                  <button className="action-button update-button">Update Order</button>
+                  <button className="action-button complete-button">Mark Complete</button>
                 </div>
               </div>
             </div>

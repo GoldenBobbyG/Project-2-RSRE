@@ -13,7 +13,7 @@ const ScheduledMaintenance: React.FC = () => {
       customer: 'Emily Johnson',
       phone: '(555) 123-4567',
       requestDate: '2025-04-01',
-      priority: 'standard',
+      estimatedCost: 189.99,
       services: [
         { 
           id: 101, 
@@ -35,7 +35,7 @@ const ScheduledMaintenance: React.FC = () => {
       customer: 'Robert Chen',
       phone: '(555) 987-6543',
       requestDate: '2025-04-01',
-      priority: 'urgent',
+      estimatedCost: 159.50,
       services: [
         { 
           id: 103, 
@@ -57,7 +57,7 @@ const ScheduledMaintenance: React.FC = () => {
       customer: 'Sarah Martinez',
       phone: '(555) 765-4321',
       requestDate: '2025-03-31',
-      priority: 'standard',
+      estimatedCost: 349.95,
       services: [
         { 
           id: 105, 
@@ -79,7 +79,7 @@ const ScheduledMaintenance: React.FC = () => {
       customer: 'Michael Thompson',
       phone: '(555) 234-5678',
       requestDate: '2025-03-30',
-      priority: 'urgent',
+      estimatedCost: 289.75,
       services: [
         { 
           id: 107, 
@@ -95,13 +95,22 @@ const ScheduledMaintenance: React.FC = () => {
     }
   ];
 
-  const getPriorityClass = (priority: string) => {
-    return priority === 'urgent' ? 'priority-urgent' : 'priority-standard';
-  };
-
   const formatDate = (dateString: string) => {
     const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'short', day: 'numeric' };
     return new Date(dateString).toLocaleDateString(undefined, options);
+  };
+
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+    }).format(amount);
+  };
+
+  // Placeholder for future cancellation functionality
+  const handleCancelClick = (orderId: number) => {
+    console.log(`Order ${orderId} cancel button clicked`);
+    // No actual functionality for now
   };
 
   return (
@@ -117,6 +126,10 @@ const ScheduledMaintenance: React.FC = () => {
               <div className="vehicle-header">
                 <div>{order.make}</div>
                 <div className="vehicle-model">{order.model}</div>
+                <div className="cancel-button" title="Cancel" onClick={() => handleCancelClick(order.id)}>
+                  <span className="cancel-icon">×</span>
+                  <span className="cancel-tooltip">Cancel</span>
+                </div>
               </div>
               
               <div className="order-content">
@@ -126,9 +139,6 @@ const ScheduledMaintenance: React.FC = () => {
                 </div>
                 
                 <div>
-                  <span className={`order-priority ${getPriorityClass(order.priority)}`}>
-                    {order.priority === 'urgent' ? 'Urgent' : 'Standard'}
-                  </span>
                   <div className="request-date">Requested: {formatDate(order.requestDate)}</div>
                 </div>
                 
@@ -142,6 +152,10 @@ const ScheduledMaintenance: React.FC = () => {
                     </li>
                   ))}
                 </ul>
+                
+                <div className="estimated-cost">
+                  Estimated Total: <span>{formatCurrency(order.estimatedCost)}</span>
+                </div>
                 
                 <div className="order-actions">
                   <button className="action-button assign-button">Assign Technician</button>
