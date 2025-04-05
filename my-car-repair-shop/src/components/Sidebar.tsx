@@ -6,19 +6,23 @@ const Sidebar: React.FC = () => {
   return (
     <div className="sidebar">
       <div className="sidebar-dashboard">
-        <Link to="/" className="sidebar-link">
+        <Link to="/employee" className="sidebar-link">
           Dashboard
         </Link>
       </div>
       <div className="sidebar-menu">
-        <Link to="/scheduled-maintenance" className="sidebar-link">
+        <Link to="/employee/scheduled-maintenance" className="sidebar-link">
           Scheduled Maintenance
         </Link>
-        <Link to="/current-maintenance" className="sidebar-link">
+        <Link to="/employee/current-maintenance" className="sidebar-link">
           Current Maintenance
         </Link>
-        <Link to="/order-parts" className="sidebar-link">
+        <Link to="/employee/order-parts" className="sidebar-link">
           Order Parts
+        </Link>
+        {/* New Records Link */}
+        <Link to="/employee/records" className="sidebar-link">
+          Maintenance Records
         </Link>
       </div>
     </div>

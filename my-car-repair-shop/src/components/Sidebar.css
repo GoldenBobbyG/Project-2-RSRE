@@ -12,7 +12,7 @@
 
 .sidebar-dashboard {
   margin-bottom: 32px;
-  padding: 0 0 20px 0;
+  padding-bottom: 20px;
   position: relative;
   text-align: center;
 }
@@ -24,27 +24,20 @@
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, 
-    rgba(59,130,246,0) 0%, 
-    rgba(59,130,246,0.6) 50%, 
-    rgba(59,130,246,0) 100%);
+  background: linear-gradient(90deg, rgba(59,130,246,0) 0%, rgba(59,130,246,0.6) 50%, rgba(59,130,246,0) 100%);
 }
 
 .sidebar-dashboard .sidebar-link {
   font-size: 22px;
   font-weight: 700;
-  color: #ffffff;
-  padding: 0;
+  color: #fff;
   background: none;
   text-transform: uppercase;
   letter-spacing: 1.5px;
   display: inline-block;
-  position: relative;
 }
 
 .sidebar-dashboard .sidebar-link:hover {
-  background: none;
-  transform: none;
   color: #3b82f6;
 }
 
@@ -52,7 +45,7 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding: 0 8px;
+  margin-top: 8px;
 }
 
 .sidebar-link {
@@ -68,7 +61,7 @@
 }
 
 .sidebar-link:hover {
-  color: #ffffff;
+  color: #fff;
   background: rgba(59, 130, 246, 0.15);
   transform: translateX(4px);
 }
@@ -77,20 +70,17 @@
   transform: translateX(4px) scale(0.98);
 }
 
-/* Active link styling */
 .sidebar-link.active {
   background: rgba(59, 130, 246, 0.2);
-  color: #ffffff;
+  color: #fff;
   border-left: 3px solid #3b82f6;
 }
 
-/* Add icons space */
 .sidebar-link .icon {
   margin-right: 12px;
   opacity: 0.8;
 }
 
-/* Add pulsing dot for current maintenance */
 .sidebar-link[to="/current-maintenance"]::after {
   content: '';
   display: inline-block;
@@ -106,9 +96,4 @@
   0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
   70% { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
   100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
-}
-
-/* Add top margin to push content down */
-.sidebar-menu {
-  margin-top: 8px;
 }

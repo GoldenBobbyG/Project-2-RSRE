@@ -1,0 +1,23 @@
+.completed-badge {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    color: white;
+    font-size: 1.4em;
+  }
+  
+  .invoice-button { 
+    background: #2196F3;
+    color: white;
+  }
+  .invoice-button:hover { 
+    background: #1976D2;
+  }
+  
+  .details-button {
+    background: #9E9E9E;
+    color: white;
+  }
+  .details-button:hover {
+    background: #757575;
+  }

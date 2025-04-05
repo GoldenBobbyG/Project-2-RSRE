@@ -3,35 +3,18 @@ import Sidebar from '../components/Sidebar';
 import './OrderParts.css';
 
 const OrderParts: React.FC = () => {
-  const [selectedCustomer, setSelectedCustomer] = useState('');
-  const [partName, setPartName] = useState('');
-  const [quantity, setQuantity] = useState(1);
-  const [notes, setNotes] = useState('');
-
-  // Mock customer data - would typically come from API
+  const [form, setForm] = useState({ customer: '', part: '', quantity: 1, notes: '' });
   const customers = [
     { id: '1', name: 'Emily Johnson - 2019 Toyota Camry' },
     { id: '2', name: 'Robert Chen - 2020 Honda CR-V' },
     { id: '3', name: 'Sarah Martinez - 2018 Ford F-150' },
-    { id: '4', name: 'Michael Thompson - 2021 BMW X5' },
   ];
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would integrate with your 3rd party API
-    console.log('Order submitted:', {
-      customer: selectedCustomer,
-      partName,
-      quantity,
-      notes
-    });
-    
-    // Reset form
-    setSelectedCustomer('');
-    setPartName('');
-    setQuantity(1);
-    setNotes('');
-    alert('Parts order submitted successfully!');
+    console.log('Order submitted:', form);
+    setForm({ customer: '', part: '', quantity: 1, notes: '' });
+    alert('Parts order submitted!');
   };
 
   return (
@@ -45,56 +28,31 @@ const OrderParts: React.FC = () => {
           <form onSubmit={handleSubmit}>
             <div className="form-group">
               <label>Select Customer Vehicle</label>
-              <select
-                value={selectedCustomer}
-                onChange={(e) => setSelectedCustomer(e.target.value)}
-                required
-              >
+              <select value={form.customer} onChange={e => setForm(f => ({...f, customer: e.target.value}))} required>
                 <option value="">Choose a customer...</option>
-                {customers.map(customer => (
-                  <option key={customer.id} value={customer.id}>
-                    {customer.name}
-                  </option>
-                ))}
+                {customers.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
               </select>
             </div>
 
             <div className="form-group">
               <label>Part Name/Number</label>
-              <input
-                type="text"
-                value={partName}
-                onChange={(e) => setPartName(e.target.value)}
-                placeholder="Enter part name or number"
-                required
-              />
+              <input value={form.part} onChange={e => setForm(f => ({...f, part: e.target.value}))} 
+                placeholder="Enter part name/number" required />
             </div>
 
             <div className="form-group">
               <label>Quantity</label>
-              <input
-                type="number"
-                value={quantity}
-                onChange={(e) => setQuantity(Number(e.target.value))}
-                min="1"
-                max="100"
-                required
-              />
+              <input type="number" value={form.quantity} min="1" max="100" required
+                onChange={e => setForm(f => ({...f, quantity: +e.target.value}))} />
             </div>
 
             <div className="form-group">
               <label>Additional Notes</label>
-              <textarea
-                value={notes}
-                onChange={(e) => setNotes(e.target.value)}
-                placeholder="Special instructions or part details"
-                rows={3}
-              />
+              <textarea value={form.notes} rows={3} placeholder="Special instructions"
+                onChange={e => setForm(f => ({...f, notes: e.target.value}))} />
             </div>
 
-            <button type="submit" className="submit-button">
-              Order Parts
-            </button>
+            <button type="submit" className="submit-button">Order Parts</button>
           </form>
         </div>
       </div>
