@@ -4,7 +4,7 @@ import {User} from '../models/User.js'; // need to added user
 
 
     // Get all parts
-export const  PartController = async (_req: Request, res: Response) => {
+export const  getAllParts = async (_req: Request, res: Response) => {
         try {
             const parts = await Part.findall({
                 include: [

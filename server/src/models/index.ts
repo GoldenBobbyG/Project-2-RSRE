@@ -1,11 +1,21 @@
-import sequelize from '../config/connection.js';
-import { FeedbackFactory } from './feedback.js';  // Import the Feedback model factory function
-import { TipFactory } from './tips.js';           // Import the Tip model factory function
+import dotenv from 'dotenv';
+dotenv.config();
 
-// Initialize the Tip model using the factory function and the Sequelize instance.
-const Tip = TipFactory(sequelize);
-// Initialize the Feedback model using the factory function and the Sequelize instance.
-const Feedback = FeedbackFactory(sequelize);
+import { Sequelize } from 'sequelize';
+import { UserFactory } from './user.js';
+import { PartFactory } from './part.js';
 
-// Export the Sequelize instance and the initialized models for use in other parts of the application.
-export { Feedback, Tip };
+const sequelize = process.env.DB_URL
+    ? new Sequelize(process.env.DB_URL) 
+    : new Sequelize(process.env.DB_Name || '', process.env.DB_PASSWORD, {
+        host: 'localhost',
+        dialect: 'postgres',
+        dialectOptions: {
+            decimalNumbers: true,
+        },
+    });
+const User = UserFactory(sequelize);
+const Part = PartFactory(sequelize);
+
+User.hasmany(Part, {foreignKey: 'userId',});
+Part.belongsTo(User, {foreignKey: 'userId',});
