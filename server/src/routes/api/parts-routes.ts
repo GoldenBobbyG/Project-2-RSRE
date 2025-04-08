@@ -3,7 +3,7 @@ import { getAllParts,
 getPartByTitle, 
 updateScheduledMaintenanceWithPart, 
 removePart, 
- } from '../../controllers/part-controller';
+ } from '../../controllers/part-controller.js';
 
 const router = express.Router();
 
@@ -11,7 +11,7 @@ const router = express.Router();
 router.get('/', getAllParts);
 
 // Route to get a specific part by ID
-router.get('/:id', getPartByTitle);
+router.get('/:title', getPartByTitle);
 
 // Update scheduled maintence with part
 router.post('/', updateScheduledMaintenanceWithPart);

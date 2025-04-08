@@ -4,7 +4,7 @@ getAllUsers,
 getUserById, 
 createUser, 
 updateUser, 
-deleteUser } from '../../controllers/user-controller';
+deleteUser } from '../../controllers/user-controller.js';
 
 
 const router = express.Router();
