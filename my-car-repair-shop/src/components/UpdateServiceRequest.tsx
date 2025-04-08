@@ -1,12 +1,12 @@
 import React from "react";
 import { useState, useEffect, FormEvent, ChangeEvent } from "react";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { ServiceData } from "../interfaces/ServiceData";
 import  serviceAPI  from "../api/serviceAPI";
 
 const UpdateServiceRequest = () => {
     const { id } = useParams<{ id: string }>();
-    const history = useHistory();
+    const history = useNavigate();
 
     const [serviceData, setServiceData] = useState<ServiceData>({
         title: '',
