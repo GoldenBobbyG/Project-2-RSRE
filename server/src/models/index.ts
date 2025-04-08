@@ -17,5 +17,5 @@ const sequelize = process.env.DB_URL
 const User = UserFactory(sequelize);
 const Part = PartFactory(sequelize);
 
-User.hasmany(Part, {foreignKey: 'userId',});
+User.hasMany(Part, {foreignKey: 'userId',});
 Part.belongsTo(User, {foreignKey: 'userId',});

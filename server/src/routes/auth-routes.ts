@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express';
-import { User } from '../models/User.js';
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt';
+import { User } from '../models/user.js';
+import * as jwt from 'jsonwebtoken';
+import * as bcrypt from 'bcrypt';
 
 export const login = async (req: Request, res: Response) => {
 
@@ -12,7 +12,7 @@ export const login = async (req: Request, res: Response) => {
     if (!user) {
         return res.status(401).json({ message: 'Invalid username or password' });
     }
-    const passwordVerify = await bcrypt.compare(password, user.password
+    const passwordVerify = await bcrypt.compare(password, user.password);
     if (!passwordVerify) {
         return res.status(401).json({ message: 'Invalid username or password' });
     }

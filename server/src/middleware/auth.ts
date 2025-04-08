@@ -1,5 +1,14 @@
 import {Request, Response, NextFunction} from 'express';
-import jwt from 'jsonwebtoken';
+
+// Extend the Request interface to include the 'user' property
+declare global {
+    namespace Express {
+        interface Request {
+            user?: JWTPayload;
+        }
+    }
+}
+import * as jwt from 'jsonwebtoken';
 
 interface JWTPayload {
     username: string;
