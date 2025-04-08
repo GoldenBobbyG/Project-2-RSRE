@@ -1,15 +1,15 @@
 import {Request, Response} from 'express';
-import {Part} from '../models/Part.js';
-import {User} from '../models/User.js'; // need to added user 
+import {Part} from '../models/part.js';
+import {User} from '../models/user.js';  
 
 
     // Get all parts
 export const  getAllParts = async (_req: Request, res: Response) => {
         try {
-            const parts = await Part.findall({
+            const parts = await Part.findAll({
                 include: [
                     {
-                        model: Part,
+                        model: User,
                         as: 'title',
                         attributes: ['id', 'part_number', 'price', 'description', 'quantity'],
                     }
@@ -26,9 +26,15 @@ export const  getAllParts = async (_req: Request, res: Response) => {
         try {
             const { title } = req.params;
             const part = await Part.findOne({
-                where: { title },
-                attributes: ['id', 'part_number', 'price', 'description', 'quantity'],
-            });
+                        where: { title },
+                        include: [
+                                {
+                                    model: User,
+                                    as: 'title',
+                                    attributes: ['id', 'part_number', 'price', 'description', 'quantity'],
+                                }
+                            ],
+                        });
             if (!part) {
                 res.status(404).json({ error: 'Part not found' });
                 return;
@@ -43,29 +49,48 @@ export const  getAllParts = async (_req: Request, res: Response) => {
 
     // Update a scheduled maintenance with a part
     export const updateScheduledMaintenanceWithPart = async (req: Request, res: Response) => { 
-        
-            const { maintenanceId, partId } = req.body;
-            const maintenance = await Part.findByTitle(maintenanceId);
+        const { title, partId } = req.params;
+        const { part_number, price, description, quantity } = req.body;
+
         try {
-           
-            if (!maintenance) {
-                res.status(404).json({ error: 'Scheduled maintenance not found' });
-                return;
-            }
-            const part = await Part.findById(partId);
-            if (!part) {
+            const part = await Part.findByPk(partId);
+            if (part) {
+                part.part_number = part_number;
+                part.price = price;
+                part.title = title;
+                part.description = description;
+                part.quantity = quantity;
+                await part.save();
+                res.json(part);
+            } else {
                 res.status(404).json({ error: 'Part not found' });
-                return;
             }
-            maintenance.parts = maintenance.parts.map((p) =>
-                p._id.toString() === partId ? part : p
-            );
-            await maintenance.save();
-            res.status(200).json(maintenance);
-        } catch (error) {
-            res.status(500).json({ error: 'Failed to update scheduled maintenance' });
+        } catch (error: any) {
+            res.status(500).json({ error: 'Failed to update part' });
         }
-    }
+
+        // delete this part
+        //     const { maintenanceId, partId } = req.body;
+        //     const maintenance = await Part.findByTitle(maintenanceId);
+        // try {
+           
+        //     if (!maintenance) {
+        //         res.status(404).json({ error: 'Scheduled maintenance not found' });
+        //         return;
+        //     }
+        //     const part = await Part.findByTitle(partId);
+        //     if (!part) {
+        //         res.status(404).json({ error: 'Part not found' });
+        //         return;
+        //     }
+        //     maintenance.parts = maintenance.parts.map((p) =>
+        //         p._id.toString() === partId ? part : p
+        //     );
+        //     await maintenance.save();
+        // } catch (error) {
+        //     res.status(500).json({ error: 'Failed to update scheduled maintenance' });
+        // }
+    };
 
     // Delete a part from scheduled maintenance
     export const removePart = async (req: Request, res: Response) => {
@@ -73,11 +98,11 @@ export const  getAllParts = async (_req: Request, res: Response) => {
         try {
             const part = await Part.findOne({ where: { title } });
             if (!part) {
-                await part.destroy();
+                await Part.destroy();
                 res.json({ message: 'part deleted successfully' });
             }else {
                 res.status(404).json({ error: 'Part not found' });
-            res.status(200).json(maintenance);
+            // res.status(200).json(maintenance);
             }        ;
         } catch (error: any) {
             res.status(500).json({ error: 'Failed to delete part' });

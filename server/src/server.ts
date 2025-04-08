@@ -8,7 +8,7 @@ const app = express();  // Create an Express application
 const PORT = process.env.PORT || 3001;  // Define the port for the server to listen on
 
 // Serves static files from the client's dist folder, typically for a built React application
-app.use(express.static('../client/dist'));
+app.use(express.static('../client/dist'));// add our client file
 
 app.use(express.json());  // Middleware to parse JSON request bodies
 app.use(routes);  // Use the imported routes for handling API endpoints
