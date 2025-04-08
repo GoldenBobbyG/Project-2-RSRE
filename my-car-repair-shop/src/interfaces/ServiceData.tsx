@@ -1,5 +1,6 @@
 export interface ServiceData {
     id: number | null;
-    clientName: string | null;
-    part: string | null;
+    name: string | null;
+    description: string | null;
+    cost: number | null; 
 } 

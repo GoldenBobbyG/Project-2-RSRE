@@ -53,9 +53,10 @@ const UpdateServiceRequest = () => {
     if (loading) return <p>Loading...</p>;
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="request-service-form">
             {error && <p style={{ color: 'red' }}>{error}</p>}
-            <div>
+            <div className="form-section">
+                <h2>Vehicle Info</h2>
                 <label htmlFor="title">Title:</label>
                 <input 
                     type="text" 
