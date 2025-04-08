@@ -4,6 +4,7 @@ import { PartData } from "../interfaces/PartData"
 const retrieveParts = async () => {
     try {
         const response = await fetch('/api/part', {
+            method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
             }

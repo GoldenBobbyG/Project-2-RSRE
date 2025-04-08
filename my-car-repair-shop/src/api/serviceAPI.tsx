@@ -84,12 +84,17 @@ const updateService = async (id: string | undefined, body: ServiceUpdate) => {
     }
 }
 
+const getServiceById = async (id: number | undefined) => {
+
+}
+
 // Create an object for serviceAPI
 const serviceAPI = {
     retrieveServices,
     retrieveService,
     addServices,
     updateService,
+    getServiceById,
 };
 
 export default serviceAPI;

@@ -1,17 +1,16 @@
-import React from "react";
 import { useState, useEffect, FormEvent, ChangeEvent } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { ServiceData } from "../interfaces/ServiceData";
+import { ServiceUpdate } from "../interfaces/ServiceUpdate";
 import  serviceAPI  from "../api/serviceAPI";
 
 const UpdateServiceRequest = () => {
     const { id } = useParams<{ id: string }>();
-    const history = useNavigate();
+    const navigate = useNavigate();
 
     const [serviceData, setServiceData] = useState<ServiceData>({
-        title: '',
-        description: '',
-        status: ''
+        id: '',
+        part: '',
     });
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -44,7 +43,7 @@ const UpdateServiceRequest = () => {
         e.preventDefault();
         try {
             await serviceAPI.updateService(id, serviceData);
-            history.push('/services'); // Redirect to the services list or another page
+            navigate('/services'); // Redirect to the services list or another page
         } catch (error) {
             setError("Error updating service.");
             console.error("Error updating service:", error);
