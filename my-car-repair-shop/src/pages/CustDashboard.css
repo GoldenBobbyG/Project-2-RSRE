@@ -1,0 +1,40 @@
+/* Dashboard.css */
+.app-container { display: flex; height: 100vh; }
+.main-content { 
+  flex: 1; padding: 2rem; 
+  background: #f5f7fa; overflow-y: auto; 
+}
+
+.main-content h1 { 
+  color: #1e293b; font-size: 1.75rem; 
+  margin-bottom: 1.5rem; padding-bottom: 0.75rem;
+  border-bottom: 3px solid; border-image: linear-gradient(90deg, #3b82f6, #2563eb) 1;
+}
+
+.features-grid {
+  display: grid; gap: 1.5rem; margin-top: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.feature-item {
+  background: #fff; padding: 1.5rem; border-radius: 8px; 
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05); transition: all 0.2s;
+  cursor: pointer; /* Make features clickable */
+}
+
+.feature-item:hover { 
+  transform: translateY(-3px); box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  background: #f8fafc; 
+}
+
+.feature-icon { 
+  font-size: 1.5rem; color: #3b82f6; margin-bottom: 1rem; 
+}
+
+.feature-item h3 { color: #1e293b; margin: 0.5rem 0; }
+.feature-item p { color: #64748b; font-size: 0.9rem; margin: 0; }
+
+@media (max-width: 768px) {
+  .main-content { padding: 1.5rem; }
+  .features-grid { grid-template-columns: 1fr; }
+}

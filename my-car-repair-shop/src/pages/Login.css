@@ -1,0 +1,99 @@
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #f5f7fa;
+  font-family: 'Inter', -apple-system, sans-serif;
+  position: relative;
+}
+
+.login-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(#e2e8f0 1px, transparent 1px) 0 0/30px 30px;
+  opacity: 0.15;
+}
+
+.login-card {
+  background: white;
+  width: 100%;
+  max-width: 500px;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.08);
+  text-align: center;
+  animation: fadeIn 0.8s ease forwards;
+}
+
+.login-logo h1 {
+  color: #1e293b;
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0 0 8px;
+}
+
+.logo-underline {
+  height: 3px;
+  width: 80px;
+  margin: 0 auto;
+  background: linear-gradient(90deg, #2a7, #1a9988);
+}
+
+.login-card h2 {
+  color: #1e293b;
+  font-size: 20px;
+  margin: 0 0 8px;
+}
+
+.login-card p {
+  color: #64748b;
+  margin: 0 0 36px;
+}
+
+.login-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 0 0 36px;
+}
+
+.login-button {
+  padding: 16px 24px;
+  border: none;
+  border-radius: 10px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,.05);
+}
+
+.employee-button { background: linear-gradient(90deg, #2a7, #1a9988); color: white; }
+.customer-button { background: white; color: #1e293b; border: 2px solid #e2e8f0; }
+
+.login-button:hover { transform: translateY(-3px); box-shadow: 0 8px 16px rgba(0,0,0,.1); }
+.employee-button:hover { background: linear-gradient(90deg, #1a9988, #2a7); }
+.customer-button:hover { background: #f8fafc; border-color: #cbd5e1; }
+
+.button-icon { font-size: 22px; margin: 0 12px 0 0; }
+
+.login-footer p { color: #94a3b8; margin: 32px 0 0; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } }
+
+@media (max-width:600px) {
+  .login-card { padding: 28px; max-width: 85%; }
+  .login-button { padding: 14px 20px; font-size: 16px; }
+  .login-logo h1 { font-size: 28px; }
+}
+
+@media (max-width:400px) {
+  .login-card { padding: 20px; }
+  .button-icon { font-size: 18px; margin-right: 8px; }
+  .login-button { padding: 12px 16px; }
+}
