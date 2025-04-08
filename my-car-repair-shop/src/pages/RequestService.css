@@ -1,0 +1,44 @@
+.app-container { display: flex; min-height: 100vh; }
+.main-content { flex:1; padding:24px; background:#f5f8fa; }
+h1 { color:#2a7; font-size:28px; margin-bottom:16px; }
+
+.request-service-form { 
+  background:white; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.05); 
+  padding:24px; max-width:800px; margin:0 auto;
+}
+
+.form-section { margin-bottom:24px; }
+.form-section h2 { 
+  color:#334155; font-size:18px; margin-bottom:16px; 
+  padding-bottom:8px; border-bottom:1px solid #eee; 
+}
+
+.form-row { display:flex; gap:16px; margin-bottom:16px; }
+.form-group { flex:1; margin-bottom:12px; }
+.form-group label { display:block; margin:8px 0; color:#475569; font-weight:500; }
+
+select, input, textarea {
+  width:100%; padding:10px 12px; border:1px solid #ddd; border-radius:6px;
+  font-size:15px; transition:border-color 0.2s;
+}
+
+input[type="date"] { padding:9px 12px; }
+textarea { min-height:100px; resize:vertical; }
+
+.service-options { display:grid; grid-template-columns:repeat(auto-fill, minmax(200px,1fr)); gap:12px; }
+.service-option { 
+  background:#f8fafc; border:1px solid #e2e8f0; border-radius:6px; 
+  padding:12px; cursor:pointer; transition:all 0.2s; 
+}
+.service-option.selected { background:rgba(42,119,119,0.1); border-color:#2a7; }
+
+.form-actions { margin-top:24px; text-align:right; }
+button { 
+  background:#2a7; color:white; border:0; padding:12px 24px;
+  border-radius:8px; cursor:pointer; font-weight:500;
+}
+
+@media (max-width:768px) {
+  .form-row { flex-direction:column; }
+  .service-options { grid-template-columns:1fr; }
+}

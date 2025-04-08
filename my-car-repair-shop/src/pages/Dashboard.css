@@ -1,81 +1,40 @@
-/* Dashboard.css */
-.app-container {
-  display: flex;
-  height: 100vh;
-  background-color: #f5f7fa;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-}
+.app-container { display: flex; height: 100vh; background: #f5f7fa; font-family: 'Inter', -apple-system, sans-serif; }
 
 .main-content {
   flex: 1;
   padding: 32px 40px;
-  background-color: #f5f7fa;
   overflow-y: auto;
   position: relative;
-  box-shadow: inset 5px 0 15px rgba(0, 0, 0, 0.03);
-  transition: all 0.3s ease;
+  box-shadow: inset 5px 0 15px #00000008;
 }
 
 .main-content h1 {
   color: #1e293b;
   font-size: 28px;
-  font-weight: 700;
-  margin-bottom: 24px;
-  position: relative;
+  margin: 0 0 24px;
   padding-bottom: 12px;
+  position: relative;
 }
 
 .main-content h1::after {
   content: '';
   position: absolute;
-  left: 0;
-  bottom: 0;
+  left: 0; bottom: 0;
   height: 3px;
   width: 60px;
   background: linear-gradient(90deg, #2a7, #1a9988);
-  border-radius: 2px;
-}
-
-.main-content p {
-  color: #64748b;
-  font-size: 16px;
-  line-height: 1.6;
-  max-width: 800px;
 }
 
 .info-card {
   background: white;
   border-radius: 12px;
   padding: 24px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 12px #0000000d;
   margin-bottom: 24px;
+  transition: .2s ease;
 }
 
-.info-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.07);
-}
-
-.card-header {
-  margin-bottom: 1.5rem;
-  position: relative;
-}
-
-.decorative-line {
-  height: 3px;
-  width: 60px;
-  background: #2a7;
-  margin-top: 0.5rem;
-}
-
-.mission-statement {
-  color: #444;
-  font-size: 1.1rem;
-  line-height: 1.6;
-  font-style: italic;
-  padding: 0 1rem;
-}
+.info-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px #00000012; }
 
 .features-grid {
   display: grid;
@@ -89,88 +48,22 @@
   padding: 1.5rem;
   border-radius: 8px;
   background: #f8fafc;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 6px #0000000d;
+  transition: .2s ease;
 }
 
-.feature-item:hover {
-  background: #f1f5f9;
-  transform: translateY(-2px);
+.feature-item:hover { background: #f1f5f9; transform: translateY(-2px); }
+
+.feature-icon { font-size: 2rem; margin: 0 0 1rem; color: #2a7; }
+
+@media (max-width:768px) {
+  .main-content { padding: 24px; }
+  .features-grid { grid-template-columns: 1fr; }
+  .info-card { padding: 1.5rem; }
 }
 
-.feature-icon {
-  font-size: 2rem;
-  margin-bottom: 1rem;
-  display: block;
-  color: #2a7;
-}
-
-.feature-item h3 {
-  color: #1e293b;
-  margin-bottom: 0.5rem;
-  font-size: 1.1rem;
-}
-
-.feature-item p {
-  color: #64748b;
-  font-size: 0.9rem;
-  line-height: 1.4;
-  margin: 0;
-}
-
-.main-content::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image: radial-gradient(#e2e8f0 1px, transparent 1px);
-  background-size: 30px 30px;
-  opacity: 0.15;
-  pointer-events: none;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.main-content h1,
-.main-content p {
-  animation: fadeIn 0.6s ease forwards;
-}
-
-.main-content p {
-  animation-delay: 0.2s;
-  opacity: 0;
-  animation-fill-mode: forwards;
-}
-
-@media (max-width: 768px) {
-  .main-content {
-    padding: 24px;
-  }
-
-  .features-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .info-card {
-    padding: 1.5rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .main-content {
-    padding: 16px;
-  }
-
-  .main-content h1 {
-    font-size: 24px;
-  }
-
-  .feature-item {
-    padding: 1rem;
-  }
+@media (max-width:480px) {
+  .main-content { padding: 16px; }
+  .main-content h1 { font-size: 24px; }
+  .feature-item { padding: 1rem; }
 }
