@@ -42,3 +42,22 @@ button {
   .form-row { flex-direction:column; }
   .service-options { grid-template-columns:1fr; }
 }
+/* Add these styles to your existing RequestService.css file */
+.mileage-input {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding-right: 30px;
+}
+
+.form-row .form-group {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.mileage-hint {
+  display: block;
+  color: #64748b;
+  font-size: 12px;
+  margin-top: 4px;
+}

@@ -5,9 +5,7 @@ import './RequestService.css';
 interface Service { id: number; name: string; description: string; estimatedCost: number; }
 
 const RequestService: React.FC = () => {
-  const [form, setForm] = useState({
-    make: '', model: '', year: '', name: '', date: '', comments: ''
-  });
+  const [form, setForm] = useState({ make: '', model: '', year: '', mileage: '', name: '', date: '', comments: '' });
   const [selected, setSelected] = useState<number[]>([]);
   const [makes] = useState(['Toyota', 'Honda', 'Ford', 'Chevrolet', 'BMW', 'Mercedes', 'Audi', 'Nissan', 'Hyundai', 'Kia']);
   const [models, setModels] = useState<string[]>([]);
@@ -30,20 +28,12 @@ const RequestService: React.FC = () => {
     setModels(form.make ? modelMap[form.make] || [] : []);
   }, [form.make]);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log({...form, services: selected});
-    alert('Request submitted!');
-  };
-
   return (
     <div className="app-container">
       <Sidebar />
       <div className="main-content">
         <h1>Request Vehicle Service</h1>
-        
-        <form onSubmit={handleSubmit} className="request-service-form">
-          {/* Vehicle Info */}
+        <form onSubmit={e => {e.preventDefault(); alert('Request submitted!');}} className="request-service-form">
           <div className="form-section">
             <h2>Vehicle Info</h2>
             <div className="form-row">
@@ -64,9 +54,25 @@ const RequestService: React.FC = () => {
                 </div>
               ))}
             </div>
+            <div className="form-row">
+              <div className="form-group">
+                <label>Current Mileage</label>
+                <input
+                  type="text"
+                  value={form.mileage}
+                  onChange={e => {
+                    const val = e.target.value;
+                    if (val === '' || /^\d+$/.test(val)) setForm({...form, mileage: val});
+                  }}
+                  placeholder="Enter current odometer reading"
+                  className="mileage-input"
+                  required
+                />
+                <small className="mileage-hint">Please enter the current odometer reading in miles</small>
+              </div>
+            </div>
           </div>
 
-          {/* Service Date */}
           <div className="form-section">
             <h2>Service Date</h2>
             <div className="form-group">
@@ -81,7 +87,6 @@ const RequestService: React.FC = () => {
             </div>
           </div>
 
-          {/* Services */}
           <div className="form-section">
             <h2>Services</h2>
             <div className="service-options">
@@ -98,7 +103,6 @@ const RequestService: React.FC = () => {
             </div>
           </div>
 
-          {/* Contact Info */}
           <div className="form-section">
             <h2>Contact Info</h2>
             <div className="form-group">
@@ -112,7 +116,6 @@ const RequestService: React.FC = () => {
             </div>
           </div>
 
-          {/* Comments */}
           <div className="form-section">
             <h2>Comments</h2>
             <div className="form-group">
