@@ -5,7 +5,7 @@ import sequelize from './config/connection.js'; // Import the initialized Sequel
 import routes from './routes/index.js';  // Import the routes for handling different endpoints
 
 const app = express();  // Create an Express application
-const PORT = process.env.PORT || 3001;  // Define the port for the server to listen on
+const PORT = process.env.PORT || 3002;  // Define the port for the server to listen on
 
 // Serves static files from the client's dist folder, typically for a built React application
 app.use(express.static('../client/dist'));// add our client file
