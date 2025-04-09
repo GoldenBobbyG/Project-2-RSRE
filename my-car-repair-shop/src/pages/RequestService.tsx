@@ -1,21 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import Sidebar from '../components/CustSidebar';
+import { submitServiceRequest, retrieveAvailableServices, submitSelectedServices } from '../api/serviceAPI';
 import './RequestService.css';
 
-//interface Service { id: number; name: string; description: string; estimatedCost: number; }
 // Define the structure of a service
 interface Service {
-  id: number; // Assuming service IDs are numbers
+  id: number;
   name: string;
   description: string;
 }
-
-// Define the props for the ServiceSelection component
-interface ServiceSelectionProps {
-  services: Service[];
-}
-
 
 const RequestService: React.FC = () => {
   const [form, setForm] = useState({
@@ -27,81 +20,104 @@ const RequestService: React.FC = () => {
     comments: ''
   });
 
-  const [selected, setSelected] = useState([]);
-  const [makes] = useState ([]);
-  const [models,setModels] = useState<string[]>([]);
+  const [selected, setSelected] = useState<number[]>([]);
+  const [makes] = useState(['Toyota', 'Honda', 'Ford', 'Chevrolet', 'BMW']);
+  const [models, setModels] = useState<string[]>([]);
   const [years] = useState(Array.from({length: 21}, (_, i) => new Date().getFullYear() - i));
+  const [services, setServices] = useState<Service[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  // const services: Service[] = [
-  // {id:1, name:'Oil Change', description:'Full oil change with filter replacement', estimatedCost:49.99},
-  // {id:2, name:'Tire Rotation', description:'Even out tire wear', estimatedCost:29.99},
-  // {id:3, name:'Brake Inspection', description:'Brake system check', estimatedCost:39.99},
-  // ];
-
-  const ServiceSelection: React.FC<ServiceSelectionProps> = ({ services }) => {
-    // Explicitly define the type of selected as number[]
-    const [selected, setSelected] = useState<number[]>([]);
-  
-    const submitSelectedServices = async () => {
+  useEffect(() => {
+    // Load available services when component mounts
+    const loadServices = async () => {
       try {
-        const response = await axios.post('/api/services', { selectedServices: selected });
-        console.log('Selected services submitted successfully:', response.data);
-        // Optionally, handle success (e.g., show a success message or reset selection)
-      } catch (error) {
-        console.error('Error submitting selected services:', error);
-        // Optionally, handle error (e.g., show an error message)
+        setLoading(true);
+        const availableServices = await retrieveAvailableServices();
+        setServices(availableServices);
+      } catch (err) {
+        console.error('Error loading services:', err);
+        setError('Failed to load available services');
+      } finally {
+        setLoading(false);
       }
     };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent the default form submission behavior
+    loadServices();
+  }, []);
+
+  useEffect(() => {
+    const modelMap: {[key: string]: string[]} = {
+      Toyota: ['Camry', 'Corolla', 'RAV4', 'Highlander', 'Tacoma'],
+      Honda: ['Civic', 'Accord', 'CR-V', 'Pilot', 'Odyssey'],
+      Ford: ['F-150', 'Escape', 'Explorer', 'Mustang', 'Edge'],
+      Chevrolet: ['Silverado', 'Equinox', 'Malibu', 'Tahoe', 'Traverse'],
+      BMW: ['3 Series', '5 Series', 'X3', 'X5', '7 Series']
+    };
+    setModels(form.make ? modelMap[form.make] || [] : []);
+  }, [form.make]);
+
+  const handleSubmitSelectedServices = async () => {
+    if (selected.length === 0) {
+      setError('Please select at least one service');
+      return;
+    }
+
     try {
-      const response = await axios.post('/api/addService', {
-        ...form,
-        services: selected // Include selected services in the request
-      });
-      console.log('Request submitted successfully:', response.data);
-      // Optionally, handle success (e.g., show a success message or reset the form)
-    } catch (error) {
-      console.error('Error submitting request:', error);
-      // Optionally, handle error (e.g., show an error message)
+      setLoading(true);
+      await submitSelectedServices(selected);
+      setError(null);
+    } catch (err) {
+      console.error('Error submitting selected services:', err);
+      setError('Failed to submit selected services');
+    } finally {
+      setLoading(false);
     }
   };
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (selected.length === 0) {
+      setError('Please select at least one service');
+      return;
+    }
 
-  // const [selected, setSelected] = useState<number[]>([]);
-  // const [makes] = useState(['Toyota', 'Honda', 'Ford', 'Chevrolet', 'BMW', 'Mercedes', 'Audi', 'Nissan', 'Hyundai', 'Kia']);
-  // const [models, setModels] = useState<string[]>([]);
-  // const [years] = useState(Array.from({length: 21}, (_, i) => new Date().getFullYear() - i));
-
-  // const services: Service[] = [
-  //   {id:1, name:'Oil Change', description:'Full oil change with filter replacement', estimatedCost:49.99},
-  //   {id:2, name:'Tire Rotation', description:'Even out tire wear', estimatedCost:29.99},
-  //   {id:3, name:'Brake Inspection', description:'Brake system check', estimatedCost:39.99},
-  // ];
-
-  // useEffect(() => {
-  //   const modelMap: {[key: string]: string[]} = {
-  //     Toyota: ['Camry','Corolla','RAV4','Highlander','Tacoma'],
-  //     Honda: ['Civic','Accord','CR-V','Pilot','Odyssey'],
-  //     Ford: ['F-150','Escape','Explorer','Mustang','Edge'],
-  //     Chevrolet: ['Silverado','Equinox','Malibu','Tahoe','Traverse'],
-  //     BMW: ['3 Series','5 Series','X3','X5','7 Series']
-  //   };
-  //   setModels(form.make ? modelMap[form.make] || [] : []);
-  // }, [form.make]);
-
-  // const handleSubmit = (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   console.log({...form, services: selected});
-  //   alert('Request submitted!');
-  // };
+    try {
+      setLoading(true);
+      await submitServiceRequest({
+        ...form,
+        services: selected
+      });
+      
+      // Reset form after successful submission
+      setForm({
+        make: '', 
+        model: '', 
+        year: '', 
+        name: '', 
+        date: '', 
+        comments: ''
+      });
+      setSelected([]);
+      setError(null);
+      
+      alert('Request submitted successfully!');
+    } catch (err) {
+      console.error('Error submitting request:', err);
+      setError('Failed to submit service request');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="app-container">
       <Sidebar />
       <div className="main-content">
         <h1>Request Vehicle Service</h1>
+        
+        {error && <div className="error-message">{error}</div>}
         
         <form onSubmit={handleSubmit} className="request-service-form">
           {/* Vehicle Info */}
@@ -114,7 +130,7 @@ const RequestService: React.FC = () => {
                   <select
                     value={form[field as keyof typeof form]}
                     onChange={e => setForm({...form, [field]: e.target.value})}
-                    disabled={field === 'model' && !form.make}
+                    disabled={(field === 'model' && !form.make) || loading}
                     required
                   >
                     <option value="">Select {field}</option>
@@ -137,46 +153,43 @@ const RequestService: React.FC = () => {
                 value={form.date}
                 onChange={e => setForm({...form, date: e.target.value})}
                 min={new Date().toISOString().split('T')[0]}
+                disabled={loading}
                 required
               />
             </div>
           </div>
 
           <div className="form-section">
-           <h2>Services</h2>
-            <div className="service-options">
-               {services.map(s => (
-                <div key={s.id} className={`service-option ${selected.includes(s.id) ? 'selected' : ''}`}
-                onClick={() => setSelected(prev => prev.includes(s.id) ? prev.filter(id => id !== s.id) : [...prev, s.id])}>
-                <input type="checkbox" checked={selected.includes(s.id)} readOnly />
-                <div>
-                  <div className="service-name">{s.name}</div>
-                  <div className="service-description">{s.description}</div>
-            </div>
-          </div>
-        ))}
-      </div>
-      <button onClick={submitSelectedServices}>Submit Selected Services</button>
-    </div>
-     
-      
-  
-          {/* Services
-          <div className="form-section">
             <h2>Services</h2>
             <div className="service-options">
-              {services.map(s => (
-                <div key={s.id} className={`service-option ${selected.includes(s.id) ? 'selected' : ''}`}
-                  onClick={() => setSelected(prev => prev.includes(s.id) ? prev.filter(id => id !== s.id) : [...prev, s.id])}>
-                  <input type="checkbox" checked={selected.includes(s.id)} readOnly />
-                  <div>
-                    <div className="service-name">{s.name}</div>
-                    <div className="service-description">{s.description}</div>
+              {loading ? (
+                <p>Loading services...</p>
+              ) : services.length === 0 ? (
+                <p>No services available</p>
+              ) : (
+                services.map(s => (
+                  <div 
+                    key={s.id} 
+                    className={`service-option ${selected.includes(s.id) ? 'selected' : ''}`}
+                    onClick={() => setSelected(prev => 
+                      prev.includes(s.id) ? prev.filter(id => id !== s.id) : [...prev, s.id]
+                    )}
+                  >
+                    <input 
+                      type="checkbox" 
+                      checked={selected.includes(s.id)} 
+                      onChange={() => {}} 
+                      disabled={loading}
+                    />
+                    <div>
+                      <div className="service-name">{s.name}</div>
+                      <div className="service-description">{s.description}</div>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))
+              )}
             </div>
-          </div> */}
+          </div>
 
           {/* Contact Info */}
           <div className="form-section">
@@ -187,6 +200,7 @@ const RequestService: React.FC = () => {
                 type="text"
                 value={form.name}
                 onChange={e => setForm({...form, name: e.target.value})}
+                disabled={loading}
                 required
               />
             </div>
@@ -202,12 +216,15 @@ const RequestService: React.FC = () => {
                 onChange={e => setForm({...form, comments: e.target.value})}
                 className="form-textarea"
                 placeholder="Any special requests or details about your vehicle..."
+                disabled={loading}
               />
             </div>
           </div>
 
           <div className="form-actions">
-            <button type="submit">Submit Request</button>
+            <button type="submit" disabled={loading}>
+              {loading ? 'Submitting...' : 'Submit Request'}
+            </button>
           </div>
         </form>
       </div>
