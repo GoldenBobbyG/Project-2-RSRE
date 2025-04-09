@@ -1,124 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import Sidebar from '../components/CustSidebar';
-import { submitServiceRequest, retrieveAvailableServices, submitSelectedServices } from '../api/serviceAPI';
 import './RequestService.css';
 
-// Define the structure of a service
-interface Service {
-  id: number;
-  name: string;
-  description: string;
-}
+interface Service { id: number; name: string; description: string; estimatedCost: number; }
 
 const RequestService: React.FC = () => {
   const [form, setForm] = useState({
-    make: '', 
-    model: '', 
-    year: '', 
-    name: '', 
-    date: '', 
-    comments: ''
+    make: '', model: '', year: '', name: '', date: '', comments: ''
   });
-  
   const [selected, setSelected] = useState<number[]>([]);
-  const [makes] = useState(['Toyota', 'Honda', 'Ford', 'Chevrolet', 'BMW']);
+  const [makes] = useState(['Toyota', 'Honda', 'Ford', 'Chevrolet', 'BMW', 'Mercedes', 'Audi', 'Nissan', 'Hyundai', 'Kia']);
   const [models, setModels] = useState<string[]>([]);
   const [years] = useState(Array.from({length: 21}, (_, i) => new Date().getFullYear() - i));
-  const [services, setServices] = useState<Service[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
-  // Load services on mount
-  useEffect(() => {
-    const loadServices = async () => {
-      try {
-        setLoading(true);
-        const availableServices = await retrieveAvailableServices();
-        setServices(availableServices);
-      } catch (err) {
-        console.error('Error loading services:', err);
-        setError('Failed to load available services');
-      } finally {
-        setLoading(false);
-      }
-    };
+  const services: Service[] = [
+    {id:1, name:'Oil Change', description:'Full oil change with filter replacement', estimatedCost:49.99},
+    {id:2, name:'Tire Rotation', description:'Even out tire wear', estimatedCost:29.99},
+    {id:3, name:'Brake Inspection', description:'Brake system check', estimatedCost:39.99},
+  ];
 
-    loadServices();
-  }, []);
-
-  // Update models based on selected make
   useEffect(() => {
     const modelMap: {[key: string]: string[]} = {
-      Toyota: ['Camry', 'Corolla', 'RAV4', 'Highlander', 'Tacoma'],
-      Honda: ['Civic', 'Accord', 'CR-V', 'Pilot', 'Odyssey'],
-      Ford: ['F-150', 'Escape', 'Explorer', 'Mustang', 'Edge'],
-      Chevrolet: ['Silverado', 'Equinox', 'Malibu', 'Tahoe', 'Traverse'],
-      BMW: ['3 Series', '5 Series', 'X3', 'X5', '7 Series']
+      Toyota: ['Camry','Corolla','RAV4','Highlander','Tacoma'],
+      Honda: ['Civic','Accord','CR-V','Pilot','Odyssey'],
+      Ford: ['F-150','Escape','Explorer','Mustang','Edge'],
+      Chevrolet: ['Silverado','Equinox','Malibu','Tahoe','Traverse'],
+      BMW: ['3 Series','5 Series','X3','X5','7 Series']
     };
     setModels(form.make ? modelMap[form.make] || [] : []);
   }, [form.make]);
 
-  const handleServiceSelection = (serviceId: number) => {
-    setSelected(prev => prev.includes(serviceId)
-      ? prev.filter(id => id !== serviceId)
-      : [...prev, serviceId]
-    );
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (selected.length === 0) {
-      setError('Please select at least one service');
-      return;
-    }
-
-    try {
-      setLoading(true);
-      await submitServiceRequest({
-        ...form,
-        services: selected
-      });
-      
-      // Reset form after successful submission
-      setForm({
-        make: '', 
-        model: '', 
-        year: '', 
-        name: '', 
-        date: '', 
-        comments: ''
-      });
-      setSelected([]);
-      setError(null);
-      
-      alert('Request submitted successfully!');
-    } catch (err) {
-      console.error('Error submitting request:', err);
-      setError('Failed to submit service request');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Call submitSelectedServices if needed, for example, when a user explicitly submits the selected services.
-  const handleSubmitSelectedServices = async () => {
-    if (selected.length === 0) {
-      setError('Please select at least one service');
-      return;
-    }
-
-    try {
-      setLoading(true);
-      await submitSelectedServices(selected);
-      setError(null);
-      alert('Services submitted successfully!');
-    } catch (err) {
-      console.error('Error submitting selected services:', err);
-      setError('Failed to submit selected services');
-    } finally {
-      setLoading(false);
-    }
+    console.log({...form, services: selected});
+    alert('Request submitted!');
   };
 
   return (
@@ -126,8 +41,6 @@ const RequestService: React.FC = () => {
       <Sidebar />
       <div className="main-content">
         <h1>Request Vehicle Service</h1>
-        
-        {error && <div className="error-message">{error}</div>}
         
         <form onSubmit={handleSubmit} className="request-service-form">
           {/* Vehicle Info */}
@@ -140,7 +53,7 @@ const RequestService: React.FC = () => {
                   <select
                     value={form[field as keyof typeof form]}
                     onChange={e => setForm({...form, [field]: e.target.value})}
-                    disabled={(field === 'model' && !form.make) || loading}
+                    disabled={field === 'model' && !form.make}
                     required
                   >
                     <option value="">Select {field}</option>
@@ -163,7 +76,6 @@ const RequestService: React.FC = () => {
                 value={form.date}
                 onChange={e => setForm({...form, date: e.target.value})}
                 min={new Date().toISOString().split('T')[0]}
-                disabled={loading}
                 required
               />
             </div>
@@ -173,30 +85,16 @@ const RequestService: React.FC = () => {
           <div className="form-section">
             <h2>Services</h2>
             <div className="service-options">
-              {loading ? (
-                <p>Loading services...</p>
-              ) : services.length === 0 ? (
-                <p>No services available</p>
-              ) : (
-                services.map(s => (
-                  <div 
-                    key={s.id} 
-                    className={`service-option ${selected.includes(s.id) ? 'selected' : ''}`}
-                    onClick={() => handleServiceSelection(s.id)}
-                  >
-                    <input 
-                      type="checkbox" 
-                      checked={selected.includes(s.id)} 
-                      onChange={() => {}} 
-                      disabled={loading}
-                    />
-                    <div>
-                      <div className="service-name">{s.name}</div>
-                      <div className="service-description">{s.description}</div>
-                    </div>
+              {services.map(s => (
+                <div key={s.id} className={`service-option ${selected.includes(s.id) ? 'selected' : ''}`}
+                  onClick={() => setSelected(prev => prev.includes(s.id) ? prev.filter(id => id !== s.id) : [...prev, s.id])}>
+                  <input type="checkbox" checked={selected.includes(s.id)} readOnly />
+                  <div>
+                    <div className="service-name">{s.name}</div>
+                    <div className="service-description">{s.description}</div>
                   </div>
-                ))
-              )}
+                </div>
+              ))}
             </div>
           </div>
 
@@ -209,7 +107,6 @@ const RequestService: React.FC = () => {
                 type="text"
                 value={form.name}
                 onChange={e => setForm({...form, name: e.target.value})}
-                disabled={loading}
                 required
               />
             </div>
@@ -225,22 +122,12 @@ const RequestService: React.FC = () => {
                 onChange={e => setForm({...form, comments: e.target.value})}
                 className="form-textarea"
                 placeholder="Any special requests or details about your vehicle..."
-                disabled={loading}
               />
             </div>
           </div>
 
           <div className="form-actions">
-            <button type="submit" disabled={loading}>
-              {loading ? 'Submitting...' : 'Submit Request'}
-            </button>
-            <button
-              type="button"
-              onClick={handleSubmitSelectedServices}
-              disabled={loading}
-            >
-              {loading ? 'Submitting...' : 'Submit Selected Services'}
-            </button>
+            <button type="submit">Submit Request</button>
           </div>
         </form>
       </div>
