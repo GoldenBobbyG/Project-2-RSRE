@@ -19,7 +19,7 @@ const RequestService: React.FC = () => {
     date: '', 
     comments: ''
   });
-
+  
   const [selected, setSelected] = useState<number[]>([]);
   const [makes] = useState(['Toyota', 'Honda', 'Ford', 'Chevrolet', 'BMW']);
   const [models, setModels] = useState<string[]>([]);
@@ -28,8 +28,8 @@ const RequestService: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Load services on mount
   useEffect(() => {
-    // Load available services when component mounts
     const loadServices = async () => {
       try {
         setLoading(true);
@@ -46,6 +46,7 @@ const RequestService: React.FC = () => {
     loadServices();
   }, []);
 
+  // Update models based on selected make
   useEffect(() => {
     const modelMap: {[key: string]: string[]} = {
       Toyota: ['Camry', 'Corolla', 'RAV4', 'Highlander', 'Tacoma'],
@@ -57,22 +58,11 @@ const RequestService: React.FC = () => {
     setModels(form.make ? modelMap[form.make] || [] : []);
   }, [form.make]);
 
-  const handleSubmitSelectedServices = async () => {
-    if (selected.length === 0) {
-      setError('Please select at least one service');
-      return;
-    }
-
-    try {
-      setLoading(true);
-      await submitSelectedServices(selected);
-      setError(null);
-    } catch (err) {
-      console.error('Error submitting selected services:', err);
-      setError('Failed to submit selected services');
-    } finally {
-      setLoading(false);
-    }
+  const handleServiceSelection = (serviceId: number) => {
+    setSelected(prev => prev.includes(serviceId)
+      ? prev.filter(id => id !== serviceId)
+      : [...prev, serviceId]
+    );
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -106,6 +96,26 @@ const RequestService: React.FC = () => {
     } catch (err) {
       console.error('Error submitting request:', err);
       setError('Failed to submit service request');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Call submitSelectedServices if needed, for example, when a user explicitly submits the selected services.
+  const handleSubmitSelectedServices = async () => {
+    if (selected.length === 0) {
+      setError('Please select at least one service');
+      return;
+    }
+
+    try {
+      setLoading(true);
+      await submitSelectedServices(selected);
+      setError(null);
+      alert('Services submitted successfully!');
+    } catch (err) {
+      console.error('Error submitting selected services:', err);
+      setError('Failed to submit selected services');
     } finally {
       setLoading(false);
     }
@@ -159,6 +169,7 @@ const RequestService: React.FC = () => {
             </div>
           </div>
 
+          {/* Services */}
           <div className="form-section">
             <h2>Services</h2>
             <div className="service-options">
@@ -171,9 +182,7 @@ const RequestService: React.FC = () => {
                   <div 
                     key={s.id} 
                     className={`service-option ${selected.includes(s.id) ? 'selected' : ''}`}
-                    onClick={() => setSelected(prev => 
-                      prev.includes(s.id) ? prev.filter(id => id !== s.id) : [...prev, s.id]
-                    )}
+                    onClick={() => handleServiceSelection(s.id)}
                   >
                     <input 
                       type="checkbox" 
@@ -224,6 +233,13 @@ const RequestService: React.FC = () => {
           <div className="form-actions">
             <button type="submit" disabled={loading}>
               {loading ? 'Submitting...' : 'Submit Request'}
+            </button>
+            <button
+              type="button"
+              onClick={handleSubmitSelectedServices}
+              disabled={loading}
+            >
+              {loading ? 'Submitting...' : 'Submit Selected Services'}
             </button>
           </div>
         </form>
