@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Sidebar from '../components/Sidebar';
-import { retrieveScheduledMaintenance, assignTechnician, cancelServiceOrder, ServiceOrder } from '../api/serviceAPI';
+import { retrieveScheduledMaintenance, assignTechnician, cancelServiceOrder, ServiceOrder } from '../api/orderAPI';
 import './ScheduledMaintenance.css';
 
 const ScheduledMaintenance: React.FC = () => {
@@ -42,8 +42,8 @@ const ScheduledMaintenance: React.FC = () => {
   };
 
   const handleAssignTechnician = async (orderId: number) => {
-    // In a real application, you might show a modal to select a technician
-    const technicianId = 1; // Placeholder for demo purposes
+    
+    const technicianId = 1; 
     
     try {
       const updatedOrder = await assignTechnician(orderId, technicianId);

@@ -1,4 +1,4 @@
-# Car Repair Shop Portal 
+# Project 2 : Fleet Repair Shop
   ![Static Badge](https://img.shields.io/badge/license-MIT-blue.svg)
   ## Description
     Interactive vehicle maintenance scheduler with functional customer and employee pages. Through this application, customers can schedule maintenance, request services and view their previous service history all within the application. Employees are able to view vehicles that are scheduled for maintenance or currently being serviced, and also order the necessary parts for their tasks. 

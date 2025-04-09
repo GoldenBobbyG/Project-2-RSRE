@@ -1,6 +1,6 @@
 import Auth from '../utils/auth';
 import { ServiceData } from "../interfaces/ServiceData";
-import { ServiceUpdate } from "../interfaces/ServiceUpdate";
+import { ServiceUpdate } from '../interfaces/ServiceUpdate';
 
 // Define interfaces for the service request data
 export interface ServiceRequestData {

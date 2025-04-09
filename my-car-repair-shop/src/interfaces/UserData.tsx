@@ -1,4 +1,4 @@
-export interface ClientData {
+export interface UserData {
     id: number | null;
     first_name: string | null;
     last_name: string | null;

@@ -1,8 +1,8 @@
 import { useState, useEffect, FormEvent, ChangeEvent } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { ServiceData } from "../interfaces/ServiceData";
-import { ServiceUpdate } from "../interfaces/ServiceUpdate";
-import { retrieveService, updateService } from "../api/serviceAPI";
+import { ServiceData } from "../interfaces/OrderData";
+import { ServiceUpdate } from "../interfaces/OrderUpdate";
+import { retrieveService, updateService } from "../api/orderAPI";
 
 interface ExtendedServiceData extends ServiceData {
   title?: string | null;

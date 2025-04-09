@@ -1,8 +1,5 @@
 import Auth from '../utils/auth';
 
-/**
- * Retrieves all users
- */
 export const retrieveUsers = async () => {
   try {
     const response = await fetch('/api/users', {
@@ -25,12 +22,9 @@ export const retrieveUsers = async () => {
   }
 };
 
-/**
- * Retrieves a specific user by ID
- */
 export const retrieveUser = async (id: string | number) => {
   try {
-    const response = await fetch(`/api/users/${id}`, {
+    const response = await fetch(`/api/user/${id}`, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${Auth.getToken()}`
@@ -50,12 +44,10 @@ export const retrieveUser = async (id: string | number) => {
   }
 };
 
-/**
- * Updates a user's information
- */
+
 export const updateUser = async (id: string | number, userData: any) => {
   try {
-    const response = await fetch(`/api/users/${id}`, {
+    const response = await fetch(`/api/user/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -76,3 +68,4 @@ export const updateUser = async (id: string | number, userData: any) => {
     return Promise.reject('Could not update user');
   }
 };
+
