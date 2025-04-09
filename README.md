@@ -1,37 +1,51 @@
-# 🏗️ Populate User Registry with Database Data
+# Project 2 : Fleet Repair Shop
+  ![Static Badge](https://img.shields.io/badge/license-MIT-blue.svg)
+  ## Description
+    Interactive vehicle maintenance scheduler with functional customer and employee pages. Through this application, customers can schedule maintenance, request services and view their previous service history all within the application. Employees are able to view vehicles that are scheduled for maintenance or currently being serviced, and also order the necessary parts for their tasks. 
 
-Work with a partner to implement the following user story:
+  ## User Story
+  ``` md
+    AS A fleet maintenance shop owner
+    I WANT a fleet maintenance scheduler with a secure login page
+    SO THAT I can efficiently track maintenance tasks, schedule repairs, and manage vehicle 
+    availability.
+    WHEN a vehicle is due for maintenance,  a user is notified upon logging into their 
+    profile. 
+```
 
-* As a user, I want to see a list of the other users who are registered with the app.
 
-## Acceptance Criteria
+  ## Table of Contents
+  - [Installation](#installation)
+  - [Usage](#usage)
+  - [License](#license)
+  - [Contributors](#contributors)
+  - [Tests](#tests)
+  - [Questions](#questions)
+  ## Installation
+  - npm i to install dependency packages
+  - npm start to run application 
+  ## Technologies used 
+    * React
+    * PostgresSQL
+    * Github
+    * VS Code
+    * Git Bash
+    * Bootstrap
+    * Slack
+    * Pure CSS
+    * W3 Schools
+    * Stack Overflow 
 
-* It's done when the homepage displays the user data from the database instead of the hardcoded values.
+  ## Screenshot 
+  ![Customer Dashboard](./assets/custDash.png)
+  ![Request for Services](./assets/ReqServ.png)
+  ![Service History](./assets/serviceHist.png)
+  ![Contact Information](./assets/contact.png)
 
-* It's done when the users are sorted alphabetically by name.
+  ## Dependencies 
 
-## Assets
-
-The following image demonstrates the web application's appearance and functionality:
-
-![The homepage displays an alphabetical list of users and their e-mail addresses beneath the heading, "User Registry."](./Images/01-user-registry.png)
-
----
-
-## 💡 Hints
-
-* Without a sign-up form, how can you quickly add new users to the database?
-
-* What needs to happen with the Sequelize data before it can be passed into the client side?
-
-## 🏆 Bonus
-
-If you've completed this activity, work through the following challenge with your group to further your knowledge:
-
-* What is the difference between the MERN & PERN stack?
-
-Use [Google](https://www.google.com) or another search engine to research this.
-
----
-© 2024 edX Boot Camps LLC. Confidential and Proprietary. All Rights Reserved.
-
+  ## Tests 
+  npm run start:dev
+  ## License 
+  
+  ## Questions
