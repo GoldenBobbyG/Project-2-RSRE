@@ -1,9 +1,6 @@
 import { UserLogin } from "../interfaces/UserLogin";
 
-/**
- * Authenticates a user and returns login information
- * @param userInfo User credentials (username/email and password)
- */
+
 export const login = async (userInfo: UserLogin) => {
   try {
     const response = await fetch('/auth/login', {

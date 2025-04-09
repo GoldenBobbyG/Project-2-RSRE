@@ -1,6 +1,9 @@
 export interface OrderData {
-    id: number | null;
-    user_id: number | null;
-    employee_id: number | null;
+    id?: number;
+    service_name: string;
+    price: number;
+    service_date: number;
+    user_id: number;
+    employee_id: number;
     
 } 

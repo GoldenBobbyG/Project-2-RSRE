@@ -42,4 +42,42 @@ router.post('/', async (req: Request, res: Response) => {
 });
 
 //PUT /orders/:id - update order by ID 
-router.put('/:id', async )
+// Complete the PUT endpoint
+router.put('/:id', async (req: Request, res: Response) => {
+    try {
+      const order = await Order.findByPk(req.params.id);
+      if (order) {
+        await order.update(req.body);
+        res.status(200).json(order);
+      } else {
+        res.status(404).json({ error: 'Order not found' });
+      }
+    } catch (error) {
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+
+  router.delete('/:id', async (req: Request, res: Response) => {
+    try {
+      const order = await Order.findByPk(req.params.id);
+      if (order) {
+        await order.destroy();
+        res.status(200).json({ message: 'Order deleted successfully' });
+      } else {
+        res.status(404).json({ error: 'Order not found' });
+      }
+    } catch (error) {
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+
+  router.get('/user/:userId', async (req: Request, res: Response) => {
+    try {
+      const orders = await Order.findAll({
+        where: { user_id: req.params.userId }
+      });
+      res.status(200).json(orders);
+    } catch (error) {
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
