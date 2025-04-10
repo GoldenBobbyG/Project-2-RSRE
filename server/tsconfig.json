@@ -20,7 +20,8 @@
     "exactOptionalPropertyTypes": true,
     "noImplicitReturns": true,
     "noImplicitOverride": true,
-    "useUnknownInCatchVariables": true
+    "useUnknownInCatchVariables": true,
+    "types": ["node", "express", "jsonwebtoken", "bcrypt", "cors"]
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist"],
