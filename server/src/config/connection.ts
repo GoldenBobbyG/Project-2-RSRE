@@ -1,18 +1,25 @@
+import { Sequelize } from 'sequelize';  // Correct import for Sequelize
 import dotenv from 'dotenv';
-dotenv.config();  // Load environment variables from a .env file into process.env
+dotenv.config();  // Load environment variables from .env
 
-import { Sequelize } from 'sequelize';
-
-// Initialize a Sequelize instance to connect to the PostgreSQL database.
-// If DB_URL is provided in the environment variables, use it directly.
-// Otherwise, fall back to individual environment variables for database connection.
 const sequelize = process.env.DB_URL
-  ? new Sequelize(process.env.DB_URL)
-  : new Sequelize(process.env.DB_NAME || '', process.env.DB_USER || '', process.env.DB_PASSWORD, {
-      host: process.env.DB_HOST || 'localhost',       // Use dynamic host if provided in env
-      dialect: 'postgres',     // Database dialect (PostgreSQL)
+  ? new Sequelize(process.env.DB_URL, {
       dialectOptions: {
-        decimalNumbers: true,  // Ensure decimal numbers are handled correctly
+        ssl: {
+          require: true,  // This ensures SSL is used
+          rejectUnauthorized: false,  // This allows self-signed certificates
+        },
+      },
+    })
+  : new Sequelize(process.env.DB_NAME || '', process.env.DB_USER || '', process.env.DB_PASSWORD, {
+      host: process.env.DB_HOST || 'localhost',
+      dialect: 'postgres',
+      dialectOptions: {
+        decimalNumbers: true,
+        ssl: {
+          require: true,  // This ensures SSL is used
+          rejectUnauthorized: false,  // This allows self-signed certificates
+        },
       },
     });
 
