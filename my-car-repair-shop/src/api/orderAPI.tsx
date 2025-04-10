@@ -21,25 +21,30 @@ import { OrderUpdateData } from '../interfaces/OrderUpdateData';
 // }
 
 
-export const retrieveOrders = async () => {
+export const retrieveOrders = async (): Promise<OrderData[]> => {
+  const token = Auth.getToken();
+  if (!token) {
+    throw new Error('Authorization token is missing');
+  }
+
   try {
     const response = await fetch('/api/order', {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${Auth.getToken()}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     });
-    
-    const data = await response.json();
 
     if (!response.ok) {
-      throw new Error('Invalid order API response, check network tab!');
+      const errorData = await response.json();
+      throw new Error(`Error retrieving orders: ${errorData.message}`);
     }
 
+    const data = await response.json();
     return data;
   } catch (err) {
-    console.log('Error from orders retrieval:', err);
-    return [];
+    console.error('Error retrieving orders:', err);
+    throw new Error('Failed to retrieve orders');
   }
 };
 

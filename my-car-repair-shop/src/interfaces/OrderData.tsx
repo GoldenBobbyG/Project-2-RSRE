@@ -21,4 +21,3 @@ export interface OrderData {
     // user_id: number;
     // employee_id: number;
     
-} 
