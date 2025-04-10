@@ -1,31 +1,81 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Sidebar from '../components/Sidebar';
 import './ScheduledMaintenance.css';
+import axios from 'axios';
+import { PartData, OrderData } from '../interfaces/types';
 
 const ScheduledMaintenance: React.FC = () => {
-  const serviceOrders = [
-    { id:1, make:'Toyota', model:'Camry', year:2019, customer:'Emily Johnson',
-      requestDate:'2025-04-01', estimatedCost:189.99, services:[
-        { id:101, name:'Oil Change', notes:'Synthetic oil preferred' },
-        { id:102, name:'Brake Inspection', notes:'Squeaking when braking' }
-    ]},
-    { id:2, make:'Honda', model:'CR-V', year:2020, customer:'Robert Chen',
-      requestDate:'2025-04-01', estimatedCost:159.50, services:[
-        { id:103, name:'Tire Rotation', notes:'Uneven wear on front tires' },
-        { id:104, name:'Air Filter Replacement', notes:'Engine working harder' }
-    ]},
-    { id:3, make:'Ford', model:'F-150', year:2018, customer:'Sarah Martinez',
-      requestDate:'2025-03-31', estimatedCost:349.95, services:[
-        { id:105, name:'Transmission Flush', notes:'Shifting feels rough' },
-        { id:106, name:'Battery Replacement', notes:'Struggles to start' }
-    ]},
-  ];
+  const [serviceOrders, setServiceOrders] = useState<OrderData[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const formatDate = (d: string) => 
-    new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const response = await axios.get('/api/orders', {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        });
 
-  const formatCurrency = (n: number) => 
-    new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n);
+        const orders: OrderData[] = response.data.map((order: any) => ({
+          id: order.id,
+          service_name: order.service_name,
+          price: order.price,
+          service_date: new Date(order.service_date).toISOString(),
+          user_id: order.user_id,
+          employee_id: order.employee_id,
+          parts: order.parts.map((part: PartData) => ({
+            id: part.id,
+            part_number: part.part_number,
+            price: part.price,
+            title: part.title,
+            description: part.description
+          }))
+        }));
+
+        setServiceOrders(orders);
+        setError(null);
+      } catch (err) {
+        setError('Failed to load service orders');
+        console.error('Fetch error:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrders();
+  }, []);  // Only fetch orders when the component mounts
+
+  const handleCancel = async (orderId: number) => {
+    try {
+      await axios.delete(`/api/orders/${orderId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      setServiceOrders(prev => prev.filter(order => order.id !== orderId));
+    } catch (err) {
+      alert('Failed to cancel order');
+      console.error('Cancel error:', err);
+    }
+  };
+
+  const formatDate = (isoString: string) => 
+    new Date(isoString).toLocaleDateString('en-US', { 
+      year: 'numeric', 
+      month: 'short', 
+      day: 'numeric' 
+    });
+
+  const formatCurrency = (amount: number) => 
+    new Intl.NumberFormat('en-US', { 
+      style: 'currency', 
+      currency: 'USD' 
+    }).format(amount);
+
+  if (loading) return <div className="loading">Loading service orders...</div>;
+  if (error) return <div className="error">{error}</div>;
 
   return (
     <div className="app-container">
@@ -38,37 +88,38 @@ const ScheduledMaintenance: React.FC = () => {
           {serviceOrders.map(order => (
             <div key={order.id} className="order-card">
               <div className="vehicle-header">
-                <div>{order.make}</div>
-                <div className="vehicle-model">{order.model}</div>
-                <div className="cancel-button" onClick={() => console.log(`Cancel ${order.id}`)}>
+                <div>{order.service_name}</div>
+                <div className="cancel-button" onClick={() => handleCancel(order.id)}>
                   <span className="cancel-icon">×</span>
                 </div>
               </div>
               
               <div className="order-content">
-                <div className="vehicle-info">
-                  <div>{order.customer}</div>
-                  <div>{order.year}</div>
+                <div className="meta-info">
+                  <div>Requested by: User #{order.user_id}</div>
+                  <div>Assigned to: {order.employee_id ? `Tech #${order.employee_id}` : 'Unassigned'}</div>
                 </div>
                 
-                <div>Requested: {formatDate(order.requestDate)}</div>
+                <div>Requested: {formatDate(order.service_date)}</div>
                 
-                <ul className="requested-services">
-                  {order.services.map(s => (
-                    <li key={s.id} className="service-item">
-                      <div className="service-name">{s.name}</div>
-                      <div>{s.notes}</div>
+                <ul className="requested-parts">
+                  {order.parts.map(part => (
+                    <li key={part.id} className="part-item">
+                      <div className="part-title">{part.title}</div>
+                      <div>{part.description}</div>
+                      <div className="part-price">{formatCurrency(part.price)}</div>
                     </li>
                   ))}
                 </ul>
                 
-                <div className="estimated-cost">
-                  Estimated Total: <span>{formatCurrency(order.estimatedCost)}</span>
+                <div className="total-cost">
+                  Total Estimate: <span>{formatCurrency(order.price)}</span>
                 </div>
                 
                 <div className="order-actions">
-                  <button className="action-button assign-button">Assign Technician</button>
-                  <button className="action-button details-button">View Details</button>
+                  <button className="action-button assign-button">
+                    {order.employee_id ? 'Reassign' : 'Assign'} Technician
+                  </button>
                 </div>
               </div>
             </div>

@@ -1,13 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import Sidebar from '../components/CustSidebar';
 import './RequestService.css';
-import { ServiceUpdate } from '../interfaces/ServiceUpdate';
+import axios from 'axios';
 
-interface Service { id: number; name: string; description: string; estimatedCost: number; }
+interface Service {
+  id: number;
+  name: string;
+  description: string;
+  estimatedCost: number;
+}
 
 const RequestService: React.FC = () => {
   const [form, setForm] = useState({
-    make: '', model: '', year: '', name: '', date: '', comments: ''
+    make: '',
+    model: '',
+    year: '',
+    mileage: '',
+    name: '',
+    date: '',
+    comments: ''
   });
   const [selected, setSelected] = useState<number[]>([]);
   const [makes] = useState(['Toyota', 'Honda', 'Ford', 'Chevrolet', 'BMW', 'Mercedes', 'Audi', 'Nissan', 'Hyundai', 'Kia']);
@@ -15,9 +26,9 @@ const RequestService: React.FC = () => {
   const [years] = useState(Array.from({length: 21}, (_, i) => new Date().getFullYear() - i));
 
   const services: Service[] = [
-    {id:1, name:'Oil Change', description:'Full oil change with filter replacement', estimatedCost:49.99},
-    {id:2, name:'Tire Rotation', description:'Even out tire wear', estimatedCost:29.99},
-    {id:3, name:'Brake Inspection', description:'Brake system check', estimatedCost:39.99},
+    {id: 1, name: 'Oil Change', description: 'Full oil change with filter replacement', estimatedCost: 49.99},
+    {id: 2, name: 'Tire Rotation', description: 'Even out tire wear', estimatedCost: 29.99},
+    {id: 3, name: 'Brake Inspection', description: 'Brake system check', estimatedCost: 39.99}
   ];
 
   useEffect(() => {
@@ -31,10 +42,33 @@ const RequestService: React.FC = () => {
     setModels(form.make ? modelMap[form.make] || [] : []);
   }, [form.make]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log({...form, services: selected});
-    alert('Request submitted!');
+
+    const orderData = {
+      make: form.make,
+      model: form.model,
+      year: form.year,
+      mileage: form.mileage,
+      date: form.date,
+      services: selected,
+      name: form.name,
+      comments: form.comments
+    };
+
+    try {
+      const response = await axios.post('http://localhost:3001/api/orders', orderData, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}` // Use token from localStorage if applicable
+        }
+      });
+      alert('Service request submitted successfully!');
+      setForm({ make: '', model: '', year: '', mileage: '', name: '', date: '', comments: '' });
+      setSelected([]);
+    } catch (err) {
+      console.error('Submission error:', err);
+      alert('Failed to submit service request');
+    }
   };
 
   return (
@@ -42,13 +76,12 @@ const RequestService: React.FC = () => {
       <Sidebar />
       <div className="main-content">
         <h1>Request Vehicle Service</h1>
-        
         <form onSubmit={handleSubmit} className="request-service-form">
           {/* Vehicle Info */}
           <div className="form-section">
             <h2>Vehicle Info</h2>
             <div className="form-row">
-              {['make','model','year'].map(field => (
+              {['make', 'model', 'year'].map(field => (
                 <div key={field} className="form-group">
                   <label>{field.charAt(0).toUpperCase() + field.slice(1)}</label>
                   <select
@@ -58,12 +91,29 @@ const RequestService: React.FC = () => {
                     required
                   >
                     <option value="">Select {field}</option>
-                    {(field === 'make' ? makes : field === 'model' ? models : years).map(opt =>
+                    {(field === 'make' ? makes : field === 'model' ? models : years).map(opt => 
                       <option key={opt} value={opt}>{opt}</option>
                     )}
                   </select>
                 </div>
               ))}
+            </div>
+            <div className="form-row">
+              <div className="form-group">
+                <label>Current Mileage</label>
+                <input
+                  type="text"
+                  value={form.mileage}
+                  onChange={e => {
+                    const val = e.target.value;
+                    if (val === '' || /^\d+$/.test(val)) setForm({...form, mileage: val});
+                  }}
+                  placeholder="Enter current odometer reading"
+                  className="mileage-input"
+                  required
+                />
+                <small className="mileage-hint">Please enter the current odometer reading in miles</small>
+              </div>
             </div>
           </div>
 
@@ -127,6 +177,7 @@ const RequestService: React.FC = () => {
             </div>
           </div>
 
+          {/* Submit Button */}
           <div className="form-actions">
             <button type="submit">Submit Request</button>
           </div>

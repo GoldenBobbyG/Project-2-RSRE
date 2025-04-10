@@ -44,7 +44,6 @@ export const retrieveUser = async (id: string | number) => {
   }
 };
 
-
 export const updateUser = async (id: string | number, userData: any) => {
   try {
     const response = await fetch(`/api/user/${id}`, {
@@ -68,4 +67,3 @@ export const updateUser = async (id: string | number, userData: any) => {
     return Promise.reject('Could not update user');
   }
 };
-

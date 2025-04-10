@@ -80,4 +80,3 @@ export const updatePart = async (id: number | string, part: Partial<PartData>) =
     return Promise.reject('Could not update part');
   }
 };
-  
