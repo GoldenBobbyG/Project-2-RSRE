@@ -9,7 +9,7 @@
     "start:dev": "concurrently \"npm run server:dev\" \"wait-on tcp:3002 && npm run client:dev\"",
     "server": "cd server && npm start",
     "server:dev": "cd server && npm run dev",
-    "install": "cd server && npm i && cd ../client && npm i",
+    "install": "cd server && npm i && cd ../my-car-repair-shop && npm i",
     "client:build": "cd my-car-repair-shop && npm run build",
     "client:dev": "cd my-car-repair-shop && npm run dev",
     "build": "cd server && npm run build",
@@ -27,6 +27,7 @@
   "dependencies": {
     "axios": "^1.8.4",
     "bcrypt": "^5.1.1",
-    "jsonwebtoken": "^9.0.2"
+    "jsonwebtoken": "^9.0.2",
+    "sequelize": "^6.37.7"
   }
 }

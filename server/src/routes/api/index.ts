@@ -1,6 +1,7 @@
 import { Router } from 'express';
-import { partRoute } from './parts-routes.js';
+import partRoute from '../api/parts-routes';
 import { userRoute } from './user-routes.js';
+import {}
 
 const router = Router();
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Sidebar from '../components/CustSidebar';
 import './RequestService.css';
+import { ServiceUpdate } from '../interfaces/ServiceUpdate';
 
 interface Service { id: number; name: string; description: string; estimatedCost: number; }
 
