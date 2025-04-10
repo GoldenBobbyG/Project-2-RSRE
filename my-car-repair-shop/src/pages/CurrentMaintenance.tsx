@@ -2,25 +2,20 @@ import React from 'react';
 import Sidebar from '../components/Sidebar';
 import { EmployeeData } from '../interfaces/EmployeeData';
 import { OrderData } from '../interfaces/OrderData';
-// import { UserData } from '../interfaces/UserData';
+//import { UserData } from '../interfaces/UserData';
 import './CurrentMaintenance.css';
 
 // Define the props for the component
 interface CurrentListProps {
   orderData: OrderData[] | null;
-  // userData: UserData | null;
-  // employeeData: EmployeeData | null;
-  employeeInventory: EmployeeData["technician"] | null;
+
+  employeeInventory: EmployeeData[] |null;
 }
 
-const CurrentMaintenance: React.FC<CurrentListProps> = ({ orderData, employeeInventory }) => {
-  const formatDate = (d: string) =>
-    new Date(d).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    });
-
+const CurrentMaintenance: React.FC<CurrentListProps> = ({orderData, employeeInventory }) => {
+  const formatDate = (d: string) => new Date(d).toLocaleDateString('en-US',
+    { year: 'numeric', month: 'short', day: 'numeric' });
+    
   return (
     <div className="app-container">
       <Sidebar />
@@ -29,14 +24,12 @@ const CurrentMaintenance: React.FC<CurrentListProps> = ({ orderData, employeeInv
         <p>View the ongoing maintenance tasks in real-time.</p>
         <div className="service-orders-grid">
           {orderData && orderData.length > 0 ? (
-            orderData.map((order) => (
+            orderData.map(order => (
               <div key={order.id} className="order-card">
                 <div className="vehicle-header">
                   <div className="make">{order.make}</div>
                   <div className="vehicle-model">{order.model}</div>
-                  <div className="cancel-button" title="Cancel Order">
-                    ×
-                  </div>
+                  <div className="cancel-button" title="Cancel Order">×</div>
                 </div>
                 <div className="order-content">
                   <div className="vehicle-info">
@@ -44,26 +37,15 @@ const CurrentMaintenance: React.FC<CurrentListProps> = ({ orderData, employeeInv
                     <div className="vehicle-year">{order.year}</div>
                   </div>
                   <div className="technician-bill">
-                    <div>
-                      <span className="label">Technician:</span>
-                      {order.technician}
-                    </div>
-                    <div>
-                      <span className="label">Total:</span>${order.billTotal.toFixed(2)}
-                    </div>
+                    <div><span className="label">Technician:</span>{order.technician}</div>
+                    <div><span className="label">Total:</span>${order.billTotal.toFixed(2)}</div>
                   </div>
                   <div className="timing-info">
-                    <div>
-                      <span className="label">Requested:</span>
-                      {formatDate(order.requestDate)}
-                    </div>
-                    <div>
-                      <span className="label">Started:</span>
-                      {formatDate(order.startedDate)}
-                    </div>
+                    <div><span className="label">Requested:</span>{formatDate(order.requestDate)}</div>
+                    <div><span className="label">Started:</span>{formatDate(order.startedDate)}</div>
                   </div>
                   <ul className="requested-services">
-                    {order.services.map((s) => (
+                    {order.services.map(s => (
                       <li key={s.id} className="service-item">
                         <div className="service-name">{s.name}</div>
                         <div className="service-details">{s.notes}</div>
@@ -78,7 +60,7 @@ const CurrentMaintenance: React.FC<CurrentListProps> = ({ orderData, employeeInv
               </div>
             ))
           ) : (
-            <p>No current maintenance orders available.</p>
+            <div className="no-orders-message">No maintenance orders to display</div>
           )}
         </div>
       </div>
@@ -87,7 +69,6 @@ const CurrentMaintenance: React.FC<CurrentListProps> = ({ orderData, employeeInv
 };
 
 export default CurrentMaintenance;
-
 
 
 
