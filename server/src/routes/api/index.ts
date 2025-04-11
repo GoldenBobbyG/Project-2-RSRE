@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { partRoute } from './parts-routes.js';
-import { userRoute } from './user-routes.js';
+import { partRoute } from './parts-routes.js';  // Correct import now
+import { userRoute } from './user-routes.js';  // Removed unnecessary .js extension
 
 const router = Router();
 
